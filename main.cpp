@@ -22,10 +22,8 @@ void gotoxy(int x, int y);                  // 좌표 이동
 void frame();                               // 틀 출력
 void printfile(list<sortfile> *f);          // 파일 출력
 char *timeToString(struct tm *t);           // m_time 년도월 시분초 변경
-bool comparen(sortfile a, sortfile b); // 파일 이름순 정렬
-bool comparet(sortfile a, sortfile b); // 파일 시간순 정렬
-int getch();                           // 키보드 입력(원리 잘모름)
-int keycontrol();                      // 키보드 입력
+int getch();      // 키보드 입력(원리 잘모름)
+int keycontrol(); // 키보드 입력
 int main() {
     struct stat fileInfo;
     DIR *dirp;
@@ -281,8 +279,6 @@ char *timeToString(struct tm *t) {
             t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min, t->tm_sec);
     return s;
 }
-bool comparen(sortfile a, sortfile b) { return a.filename < b.filename; }
-bool comparet(sortfile a, sortfile b) { return a.time < b.time; }
 int getch() {
     int c;
     struct termios oldattr, newattr;
