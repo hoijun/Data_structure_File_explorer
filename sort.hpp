@@ -55,7 +55,7 @@ public:
     }
 
     void add(sortfile info);
-    void add(string n, int t, size_t s);
+    void add(string u, time_t t, string f, string m, off_t s);
     size_t listSize();
 
     void sortNameUp();  //오름차순 정렬

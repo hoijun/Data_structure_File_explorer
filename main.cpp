@@ -77,15 +77,28 @@ int main() {
             }
             string Tm = fileTM(&fileInfo);
             userInfo = getpwuid(fileInfo.st_uid);
+            /////////////////변경
             Files.push_back(sortfile(
                 userInfo->pw_name, timeToString(localtime(&fileInfo.st_mtime)),
                 dirInfo->d_name, Tm, fileInfo.st_size));
+
+            // Files.add(sortfile(
+            //     userInfo->pw_name, fileInfo.st_mtime,
+            //     dirInfo->d_name, Tm, fileInfo.st_size));
+            ///////////////////
         }
+        /////////////////변경
         sort(Files.begin(), Files.end(), comparen); // 파일 이름순 정렬
+        // Files.sort(compareNameUp);
+        //////////////////
         int direct = 7;
         gotoxy(3, direct); // >의 처음 위치
         printf(">");
+
+        /////////////////////변경
         printfile(Files); // 파일 출력
+        // printfile(Files.getList());
+        //////////////////////
         while (1) {
             int n = keycontrol(); // 키보드 입력
             if (n == UP) {
@@ -97,6 +110,9 @@ int main() {
                     printf(">");
                 }
             } else if (n == DOWN) {
+
+                // Files.size를 Files.listSize로
+
                 if (direct < 24 && direct < Files.size() + 6) { // > 아래로 이동
                     direct++;
                     gotoxy(3, direct - 1);
@@ -290,6 +306,22 @@ void printfile(vector<sortfile> f) {
         printf("      %s\n", f[i].filename.c_str());
     }
 }
+// void printfile(list<sortfile> f){
+//     list<sortfile>::iterator it;
+//     int i = 0;
+//     for (it = f.begin(); it != f.end(); it++) {
+//         if (i == 18)
+//             break;
+//         gotoxy(5, i + 7);
+//         printf("%s", it->tm.c_str());
+//         printf("      %-8s", it->username.c_str());
+//         printf("%8ld", it->size);
+//         printf("      %s", timeToString(localtime(it->time).c_str());
+//         printf("      %s\n", it->filename.c_str());
+
+//         i++;
+//     }
+// }
 char *timeToString(struct tm *t) {
     static char s[20];
     sprintf(s, "%04d-%02d-%02d %02d:%02d:%02d", t->tm_year + 1900,

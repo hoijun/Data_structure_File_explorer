@@ -30,13 +30,13 @@ void ListSort::add(sortfile info) {
     size++;
 }
 
-void ListSort::add(string n, int t, size_t s) {
-    sortfile info(n, t, s);
+void ListSort::add(string u, time_t t, string f, string m, off_t s) {
+    sortfile info(u, t, f, m, s);
     filelist->push_back(info);
     size++;
 }
 
-size_t ListSort::listSize() { return size; }
+size_t ListSort::listSize() { return filelist->size(); }
 
 void ListSort::sortNameUp() { filelist->sort(compareNameUp); }
 
