@@ -1,35 +1,37 @@
 #include "sort.hpp"
 
-bool compareNameUp(FileInfo a, FileInfo b) { return a.name < b.name; }
-bool compareTimeUp(FileInfo a, FileInfo b) { return a.time < b.time; }
-bool compareSizeUp(FileInfo a, FileInfo b) {
+bool compareNameUp(sortfile a, sortfile b) { return a.filename < b.filename; }
+bool compareTimeUp(sortfile a, sortfile b) { return a.time < b.time; }
+bool compareSizeUp(sortfile a, sortfile b) {
     if (a.time == b.time)
-        return a.name < b.name;
+        return a.filename < b.filename;
     else
         return a.size < b.size;
 }
-bool compareNameDown(FileInfo a, FileInfo b) { return a.name > b.name; }
-bool compareTimeDown(FileInfo a, FileInfo b) { return a.time > b.time; }
-bool compareSizeDown(FileInfo a, FileInfo b) {
+bool compareNameDown(sortfile a, sortfile b) { return a.filename > b.filename; }
+bool compareTimeDown(sortfile a, sortfile b) { return a.time > b.time; }
+bool compareSizeDown(sortfile a, sortfile b) {
     if (a.time == b.time)
-        return a.name > b.name;
+        return a.filename > b.filename;
     else
         return a.size > b.size;
 }
 
-void FileInfo::add(string n, int t, size_t s) {
-    name = s;
+void sortfile::add(string u, time_t t, string f, string m, off_t s) {
+    username = u;
     time = t;
+    filename = f;
+    tm = m;
     size = s;
 }
 
-void ListSort::add(FileInfo info) {
+void ListSort::add(sortfile info) {
     filelist->push_back(info);
     size++;
 }
 
 void ListSort::add(string n, int t, size_t s) {
-    FileInfo info(n, t, s);
+    sortfile info(n, t, s);
     filelist->push_back(info);
     size++;
 }
@@ -48,4 +50,4 @@ void ListSort::sortTimeDown() { filelist->sort(compareTimeDown); }
 
 void ListSort::sortSizeDown() { filelist->sort(compareSizeDown); }
 
-list<FileInfo> *ListSort::getList() { return filelist; }
+list<sortfile> *ListSort::getList() { return filelist; }

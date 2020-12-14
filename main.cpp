@@ -1,3 +1,5 @@
+#include "sort.hpp"
+
 #include <algorithm>
 #include <dirent.h>
 #include <fcntl.h>
@@ -23,6 +25,7 @@ class sortfile { // 파일 정렬 클래스
     string time;
     string filename;
     off_t size;
+    sortfile(){}
     sortfile(string u, string t, string f, string m, off_t s) {
         username = u;
         time = t;
@@ -46,7 +49,11 @@ int main() {
     struct dirent *dirInfo;
     struct passwd *userInfo;
     while (1) {
+        /////////////변경
         vector<sortfile> Files; // 파일 담을 벡터
+        // ListSort Files = ListSort();
+        /////////////
+
         char cwd[MAX_PATH_LEN + 1] = {
             '\0',
         };

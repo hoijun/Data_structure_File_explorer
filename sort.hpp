@@ -3,22 +3,41 @@
 
 using namespace std;
 
-// 파일 정보 담는 클래스
-// 파일 이름, 파일의 마지막 edit 시간, 파일 사이즈
-class FileInfo {
-public:
-    FileInfo(){}
-    FileInfo(string n, int t, size_t s){
-        name = n;
+// 여기서부턴 main에서 추출한 부분
+class sortfile { // 파일 정렬 클래스
+  public:
+    string tm;
+    string username;
+    time_t time;
+    string filename;
+    off_t size;
+    sortfile(string u, time_t t, string f, string m, off_t s) {
+        username = u;
         time = t;
+        filename = f;
+        tm = m;
         size = s;
     }
-    void add(string n, int t, size_t s);
-
-    string name;
-    int time;
-    size_t size;
+    void add(string u, time_t t, string f, string m, off_t s);
 };
+// 여기까지 main에서 추출
+
+// 파일 정보 담는 클래스
+// 파일 이름, 파일의 마지막 edit 시간, 파일 사이즈
+// class sortfile {
+// public:
+//     sortfile(){}
+//     sortfile(string n, int t, size_t s){
+//         name = n;
+//         time = t;
+//         size = s;
+//     }
+//     void add(string n, int t, size_t s);
+
+//     string name;
+//     int time;
+//     size_t size;
+// };
 
 // list 컨테이너 변형
 // 간단하게 add와 sort위한 list 라고 생각하면 됨.
@@ -27,15 +46,15 @@ public:
 class ListSort {
 public:
     ListSort() {
-        filelist = new list<FileInfo>;
+        filelist = new list<sortfile>;
         size = 0;
     }
-    ListSort(list<FileInfo> *flist) {
+    ListSort(list<sortfile> *flist) {
         filelist = flist;
         size = 0;
     }
 
-    void add(FileInfo info);
+    void add(sortfile info);
     void add(string n, int t, size_t s);
     size_t listSize();
 
@@ -46,16 +65,16 @@ public:
     void sortTimeDown();
     void sortSizeDown();
 
-    list<FileInfo> *getList();
+    list<sortfile> *getList();
 
   private:
-    list<FileInfo> *filelist;
+    list<sortfile> *filelist;
     size_t size;
 };
 
-bool compareNameUp(FileInfo a, FileInfo b);
-bool compareTimeUp(FileInfo a, FileInfo b);
-bool compareSizeUp(FileInfo a, FileInfo b);
-bool compareNameDown(FileInfo a, FileInfo b);
-bool compareTimeDown(FileInfo a, FileInfo b);
-bool compareSizeDown(FileInfo a, FileInfo b);
+bool compareNameUp(sortfile a, sortfile b);
+bool compareTimeUp(sortfile a, sortfile b);
+bool compareSizeUp(sortfile a, sortfile b);
+bool compareNameDown(sortfile a, sortfile b);
+bool compareTimeDown(sortfile a, sortfile b);
+bool compareSizeDown(sortfile a, sortfile b);
