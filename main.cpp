@@ -1,6 +1,36 @@
 #include "tool.cpp"
+#include "sort.hpp"
+
+#include <algorithm>
+#include <dirent.h>
+#include <fcntl.h>
+#include <pwd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <termios.h>
+#include <unistd.h>
+#include <vector>
 #define MAX_PATH_LEN 1024
 
+class sortfile { // 파일 정렬 클래스
+  public:
+    string tm;
+    string username;
+    string time;
+    string filename;
+    off_t size;
+    sortfile(){}
+    sortfile(string u, string t, string f, string m, off_t s) {
+        username = u;
+        time = t;
+        filename = f;
+        tm = m;
+        size = s;
+    }
+};
 int main() {
     while (1) {
         struct stat fileInfo;
