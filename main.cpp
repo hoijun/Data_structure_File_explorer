@@ -58,7 +58,7 @@ int main() {
             Files.add(userInfo->pw_name, fileInfo.st_mtime, dirInfo->d_name, Tm,
                       fileInfo.st_size);
         }
-        Files.sortNameUp();
+        Files.sortSizeUp();
         int direct = 7;
         gotoxy(3, direct); // >의 처음 위치
         printf(">");

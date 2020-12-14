@@ -3,7 +3,7 @@
 bool compareNameUp(sortfile a, sortfile b) { return a.filename < b.filename; }
 bool compareTimeUp(sortfile a, sortfile b) { return a.time < b.time; }
 bool compareSizeUp(sortfile a, sortfile b) {
-    if (a.time == b.time)
+    if (a.size == b.size)
         return a.filename < b.filename;
     else
         return a.size < b.size;
@@ -11,7 +11,7 @@ bool compareSizeUp(sortfile a, sortfile b) {
 bool compareNameDown(sortfile a, sortfile b) { return a.filename > b.filename; }
 bool compareTimeDown(sortfile a, sortfile b) { return a.time > b.time; }
 bool compareSizeDown(sortfile a, sortfile b) {
-    if (a.time == b.time)
+    if (a.size == b.size)
         return a.filename > b.filename;
     else
         return a.size > b.size;

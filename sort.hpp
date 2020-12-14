@@ -3,6 +3,8 @@
 
 using namespace std;
 
+// 파일 정보 담는 클래스
+// 파일 이름, 파일의 마지막 edit 시간, 파일 사이즈
 class sortfile { // 파일 정렬 클래스
   public:
     string tm;
@@ -21,8 +23,6 @@ class sortfile { // 파일 정렬 클래스
     void add(string u, time_t t, string f, string m, off_t s);
 };
 
-// 파일 정보 담는 클래스
-// 파일 이름, 파일의 마지막 edit 시간, 파일 사이즈
 
 // list 컨테이너 변형
 // 간단하게 add와 sort위한 list 라고 생각하면 됨.
