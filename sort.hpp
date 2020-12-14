@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// 여기서부턴 main에서 추출한 부분
 class sortfile { // 파일 정렬 클래스
   public:
     string tm;
@@ -11,6 +10,7 @@ class sortfile { // 파일 정렬 클래스
     time_t time;
     string filename;
     off_t size;
+    string timestring;
     sortfile(string u, time_t t, string f, string m, off_t s) {
         username = u;
         time = t;
@@ -20,24 +20,9 @@ class sortfile { // 파일 정렬 클래스
     }
     void add(string u, time_t t, string f, string m, off_t s);
 };
-// 여기까지 main에서 추출
 
 // 파일 정보 담는 클래스
 // 파일 이름, 파일의 마지막 edit 시간, 파일 사이즈
-// class sortfile {
-// public:
-//     sortfile(){}
-//     sortfile(string n, int t, size_t s){
-//         name = n;
-//         time = t;
-//         size = s;
-//     }
-//     void add(string n, int t, size_t s);
-
-//     string name;
-//     int time;
-//     size_t size;
-// };
 
 // list 컨테이너 변형
 // 간단하게 add와 sort위한 list 라고 생각하면 됨.
