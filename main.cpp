@@ -32,6 +32,7 @@ void printfile(list<sortfile> *f);          // 파일 출력
 char *timeToString(struct tm *t);           // m_time 년도월 시분초 변경
 int getch();      // 키보드 입력(원리 잘모름)
 int keycontrol(); // 키보드 입력
+int menuSort(ListSort &files);   // sort menu
 #define MAX_PATH_LEN 1024
 
 int main() {
@@ -115,7 +116,7 @@ int main() {
                     printf(">");
                     it1++;
                 }
-            } else if (n == LEFT && direct == STARTINDEX - 3) {
+            } else if (n == LEFT && direct == STARTINDEX - 3 || direct == STARTINDEX - 2) {
                 if (leftright > LRINDEX) {
                     leftright = leftright - 11;
                     gotoxy(leftright + 11, direct);
@@ -123,7 +124,8 @@ int main() {
                     gotoxy(leftright, direct);
                     printf(">");
                 }
-            } else if (n == RIGHT && direct == STARTINDEX - 3) {
+            } else if (n == RIGHT && direct == STARTINDEX - 3 ||
+                       direct == STARTINDEX - 2) {
                 if (leftright < LRINDEX + 33) {
                     leftright = leftright + 11;
                     gotoxy(leftright - 11, direct);
@@ -132,7 +134,28 @@ int main() {
                     printf(">");
                 }
             } else if (n == ENTER) {
-                if (it1->tm.find("d") != string::npos) { // 디렉토리 파일일시
+                if (direct == STARTINDEX - 3){
+                    if (leftright == LRINDEX){  // sort
+                        gotoxy(5, 7);
+                        printf("|  Name ▲ |  Size   |  Time   |\n");
+                        direct = menuSort(Files);
+                        list<sortfile> *sortedFile = Files.getList();
+                        it1 = sortedFile->begin();
+                        gotoxy(3, 29);
+                        printf("sort function");
+                    }
+                    else if (leftright == LRINDEX + 11){
+                        gotoxy(3, 29);
+                        printf("creat function");
+                    } else if (leftright == LRINDEX + (11 * 2)) {
+                        gotoxy(3, 29);
+                        printf("delete function");
+                    } else if (leftright == LRINDEX + (11 * 3)) {
+                        gotoxy(3, 29);
+                        printf("select function");
+                    }
+                }
+                else if (it1->tm.find("d") != string::npos) { // 디렉토리 파일일시
                     if (it1->filename.compare(".") == 0 ||
                         it1->filename.compare("..") ==
                             0) { //. .. 이면 그냥 이동
@@ -382,4 +405,43 @@ int keycontrol() { // 키보드 입력
         return ZIP;
     else if (t == 10)
         return ENTER;
+}
+int menuSort(ListSort &files){
+    const int rowIndex = 7;
+    int corsur = LRINDEX;
+    const int updownIndex = LRINDEX + 8;
+    int triangle = updownIndex;
+    int checkUpDown = 0;    //0이면 upward, 1이면 downward
+    gotoxy(corsur, rowIndex - 1);
+    printf(" ");
+    gotoxy(corsur, rowIndex);
+    printf(">");
+    while (1) {
+        int key = keycontrol();
+        if (key == LEFT && corsur > LRINDEX){
+            corsur = corsur - 10;
+            gotoxy(corsur + 10, rowIndex);
+            printf(" ");
+            gotoxy(corsur, rowIndex);
+            printf(">");
+        } else if (key == RIGHT && corsur < LRINDEX + 20) {
+            corsur = corsur + 10;
+            gotoxy(corsur - 10, rowIndex);
+            printf(" ");
+            gotoxy(corsur, rowIndex);
+            printf(">");
+        } else if (key == DOWN){
+            gotoxy(LRINDEX - 3, rowIndex);
+            printf("                                ");
+            gotoxy(3, rowIndex + 2);
+            printf(">");
+            return STARTINDEX;
+        } else if (key == UP){
+            gotoxy(LRINDEX - 3, rowIndex);
+            printf("                                ");
+            gotoxy(LRINDEX, rowIndex - 1);
+            printf(">");
+            return STARTINDEX - 3;
+        }
+    }
 }
