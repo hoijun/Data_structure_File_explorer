@@ -156,10 +156,11 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
                 }
             } else if (n == ENTER) {
                 if (direct == STARTINDEX - 3) {
+
                     if (leftright == LRINDEX) { // sort
                         gotoxy(5, 7);
-                        printf("|  Name ▲ |  Size   |  Time   |   Sorted by : "
-                               "name ascending\n");
+                        printf("|  Name ▲ |  Size   |  Time   |   \033[36mSorted by : "
+                               "name ascending\033[0m\n");
                         direct = menuSort(Files);
                         list<sortfile> *sortedFile = Files.getList();
                         it1 = sortedFile->begin();
@@ -600,8 +601,9 @@ int menuSort(ListSort &files) {
                     files.sortNameDown();
                 }
                 gotoxy(LRINDEX + 44, rowIndex);
-                cout << "name " << direction;
-                check.nameUp = !check.nameUp;   // enter 입력했으므로 화살표 방향 바꿈
+                cout << "\033[36mname " << direction << "\033[0m";
+                check.nameUp =
+                    !check.nameUp; // enter 입력했으므로 화살표 방향 바꿈
 
             } else if (corsur == LRINDEX + 10) {    // size
                 if (check.sizeUp) {
@@ -612,7 +614,7 @@ int menuSort(ListSort &files) {
                     files.sortSizeDown();
                 }
                 gotoxy(LRINDEX + 44, rowIndex);
-                cout << "size " << direction;
+                cout << "\033[36msize " << direction << "\033[0m";
                 check.sizeUp = !check.sizeUp;
 
             } else if (corsur == LRINDEX + 20) {    // time
@@ -624,7 +626,7 @@ int menuSort(ListSort &files) {
                     files.sortSizeDown();
                 }
                 gotoxy(LRINDEX + 44, rowIndex);
-                cout << "time " << direction;
+                cout << "\033[36mtime " << direction << "\033[0m";
                 check.timeUp = !check.timeUp;
 
             }
