@@ -1,13 +1,14 @@
 #include "sort.hpp"
 
-#include "gotoxy.h"
 #include "delete.h"
+#include "gotoxy.h"
 #include "makedirectory.h"
 #include "makefile.h"
 
 #include <algorithm>
 #include <dirent.h>
 #include <fcntl.h>
+#include <iostream>
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +17,6 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
-#include <iostream>
 #define MAX_PATH_LEN 1024
 #define UP 0
 #define DOWN 1
@@ -44,18 +44,18 @@ void gotoxy(int x, int y);                  // 좌표 이동
 void frame();                               // 틀 출력
 void printfile(list<sortfile> *f);          // 파일 출력
 char *timeToString(struct tm *t);           // m_time 년도월 시분초 변경
-int getch();                   // 키보드 입력(원리 잘모름)
-int keycontrol();              // 키보드 입력
-int menuSort(ListSort &files); // sort menu
-bool checkUp(Check check, int corsur);  // check sort direction
-void clearWindow(); // 창에 있는 파일 목록 삭제
+int getch();                           // 키보드 입력(원리 잘모름)
+int keycontrol();                      // 키보드 입력
+int menuSort(ListSort &files);         // sort menu
+bool checkUp(Check check, int corsur); // check sort direction
+void clearWindow();                    // 창에 있는 파일 목록 삭제
 
 #define MAX_PATH_LEN 1024
 
-    int main() {
+int main() {
     while (1) {
-        TOFIRST:
-        clearWindow();  // 화면 초기화
+    TOFIRST:
+        clearWindow(); // 화면 초기화
 
         int zippoint = 0;
         struct stat fileInfo;
@@ -165,7 +165,8 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
 
                     if (leftright == LRINDEX) { // sort
                         gotoxy(5, 7);
-                        printf("|  Name ▲ |  Size   |  Time   |   \033[36mSorted by : "
+                        printf("|  Name ▲ |  Size   |  Time   |   "
+                               "\033[36mSorted by : "
                                "name ascending\033[0m\n");
                         direct = menuSort(Files);
                         gotoxy(3, 29);
@@ -211,54 +212,75 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
                     break;
                 }
             } else if (n == ZIP) {
-                int direct2 = direct;
-                gotoxy(5, 8);
-                printf("압축할 파일 선택중...");
-                list<sortfile>::iterator it2 = it1;
-                string zipfilename = "";
-                while (1) {
-                    gotoxy(3, 28);
-                    printf("선택한 파일들: ");
-                    gotoxy(18, 28);
-                    printf("%s", zipfilename.c_str());
-                    int n2 = keycontrol();
-                    if (n2 == UP) {
-                        if (direct2 > STARTINDEX) { // > 위로 이동
-                            direct2--;
-                            gotoxy(3, direct2 + 1);
-                            printf(" ");
-                            gotoxy(3, direct2);
-                            printf(">");
-                            it2--;
-                        }
-                    } else if (n2 == DOWN) {
-                        if (direct2 < LASTINDEX &&
-                            direct2 < Files.listSize() + STARTINDEX -
-                                          1) { // > 아래로 이동
-                            direct2++;
-                            gotoxy(3, direct2 - 1);
-                            printf(" ");
-                            gotoxy(3, direct2);
-                            printf(">");
-                            it2++;
-                        }
-                    } else if (n2 == PUSH) {
-                        if (it2->filename.compare(".") != 0 &&
-                            it2->filename.compare("..") != 0 &&
-                            zipfilename.find(it2->filename) == string::npos) {
-                            zipfilename.append((it2->filename + " "));
-                        }
-                    } else if (n2 == ZIP) {
-                        if (zipfilename.length() > 0) {
-                            zippoint = 99;
-                            char temp[1001];
-                            gotoxy(3, 29);
-                            printf("압축 파일의 이름을 작성해 주세요: ");
-                            scanf("%s", temp);
-                            string name = temp;
-                            system(("tar -czvf " + name + ".tar.gz" + " " +
-                                    zipfilename + "1>/dev/null")
-                                       .c_str());
+                if (direct > 8) {
+                    int direct2 = direct;
+                    gotoxy(5, 8);
+                    printf("압축할 파일 선택중...");
+                    list<sortfile>::iterator it2 = it1;
+                    string zipfilename = "";
+                    while (1) {
+                        gotoxy(3, 28);
+                        printf("선택한 파일들: ");
+                        gotoxy(18, 28);
+                        printf("%s", zipfilename.c_str());
+                        int n2 = keycontrol();
+                        if (n2 == UP) {
+                            if (direct2 > STARTINDEX) { // > 위로 이동
+                                direct2--;
+                                gotoxy(3, direct2 + 1);
+                                printf(" ");
+                                gotoxy(3, direct2);
+                                printf(">");
+                                it2--;
+                            }
+                        } else if (n2 == DOWN) {
+                            if (direct2 < LASTINDEX &&
+                                direct2 < Files.listSize() + STARTINDEX -
+                                              1) { // > 아래로 이동
+                                direct2++;
+                                gotoxy(3, direct2 - 1);
+                                printf(" ");
+                                gotoxy(3, direct2);
+                                printf(">");
+                                it2++;
+                            }
+                        } else if (n2 == PUSH) {
+                            if (it2->filename.compare(".") != 0 &&
+                                it2->filename.compare("..") != 0 &&
+                                zipfilename.find(it2->filename) ==
+                                    string::npos) {
+                                zipfilename.append((it2->filename + " "));
+                            }
+                        } else if (n2 == ZIP) {
+                            if (zipfilename.length() > 0) {
+                                zippoint = 99;
+                                char temp[1001];
+                                gotoxy(3, 29);
+                                printf("압축 파일의 이름을 작성해 주세요: ");
+                                scanf("%s", temp);
+                                string name = temp;
+                                system(("tar -czvf " + name + ".tar.gz" + " " +
+                                        zipfilename + "1>/dev/null")
+                                           .c_str());
+                                gotoxy(3, direct2);
+                                printf(" ");
+                                gotoxy(3, direct);
+                                printf(">");
+                                gotoxy(5, 8);
+                                printf("                     ");
+                                gotoxy(3, 28);
+                                printf("                                       "
+                                       "    "
+                                       "    "
+                                       "                             ");
+                                gotoxy(3, 29);
+                                printf("                                       "
+                                       "    "
+                                       "    "
+                                       "                             ");
+                                break;
+                            }
+                        } else if (n2 == QUIT) {
                             gotoxy(3, direct2);
                             printf(" ");
                             gotoxy(3, direct);
@@ -268,25 +290,10 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
                             gotoxy(3, 28);
                             printf("                                           "
                                    "    "
-                                   "                             ");
-                            gotoxy(3, 29);
-                            printf("                                           "
                                    "    "
-                                   "                             ");
+                                   "                                 ");
                             break;
                         }
-                    } else if (n2 == QUIT) {
-                        gotoxy(3, direct2);
-                        printf(" ");
-                        gotoxy(3, direct);
-                        printf(">");
-                        gotoxy(5, 8);
-                        printf("                     ");
-                        gotoxy(3, 28);
-                        printf("                                               "
-                               "    "
-                               "                                 ");
-                        break;
                     }
                 }
             } else if (n == UNZIP) {
@@ -371,7 +378,6 @@ string fileTM(const struct stat *fileInfo) {
     }
     return temp;
 }
-
 
 void frame() {
     gotoxy(1, 1);
@@ -579,20 +585,22 @@ int menuSort(ListSort &files) {
                 printf("▼");
         } else if (key == DOWN) {
             gotoxy(LRINDEX - 3, rowIndex);
-            printf("                                                                ");
+            printf("                                                           "
+                   "     ");
             gotoxy(3, rowIndex + 2);
             printf(">");
             return STARTINDEX;
         } else if (key == UP) {
             gotoxy(LRINDEX - 3, rowIndex);
-            printf("                                                                ");
+            printf("                                                           "
+                   "     ");
             gotoxy(LRINDEX, rowIndex - 1);
             printf(">");
             return STARTINDEX - 3;
         } else if (key == ENTER) {
             string direction;
-            if (corsur == LRINDEX) {    // name
-                if (check.nameUp){
+            if (corsur == LRINDEX) { // name
+                if (check.nameUp) {
                     direction = "ascending ";
                     files.sortNameUp();
                 } else {
@@ -604,7 +612,7 @@ int menuSort(ListSort &files) {
                 check.nameUp =
                     !check.nameUp; // enter 입력했으므로 화살표 방향 바꿈
 
-            } else if (corsur == LRINDEX + 10) {    // size
+            } else if (corsur == LRINDEX + 10) { // size
                 if (check.sizeUp) {
                     direction = "ascending ";
                     files.sortSizeUp();
@@ -616,7 +624,7 @@ int menuSort(ListSort &files) {
                 cout << "\033[36msize " << direction << "\033[0m";
                 check.sizeUp = !check.sizeUp;
 
-            } else if (corsur == LRINDEX + 20) {    // time
+            } else if (corsur == LRINDEX + 20) { // time
                 if (check.timeUp) {
                     direction = "ascending ";
                     files.sortTimeUp();
@@ -627,7 +635,6 @@ int menuSort(ListSort &files) {
                 gotoxy(LRINDEX + 44, rowIndex);
                 cout << "\033[36mtime " << direction << "\033[0m";
                 check.timeUp = !check.timeUp;
-
             }
             gotoxy(triangle, rowIndex);
             if (checkUp(check, corsur))
@@ -640,20 +647,18 @@ int menuSort(ListSort &files) {
         }
     }
 }
-bool checkUp(Check check, int corsur){
-    if (corsur == LRINDEX){
+bool checkUp(Check check, int corsur) {
+    if (corsur == LRINDEX) {
         return check.nameUp;
-    }
-    else if (corsur == LRINDEX + 10){
+    } else if (corsur == LRINDEX + 10) {
         return check.sizeUp;
-    }
-    else if (corsur == LRINDEX + 20){
+    } else if (corsur == LRINDEX + 20) {
         return check.timeUp;
     }
     return true;
 }
 void clearWindow() {
-    for (int i = 0; i < 18; i++){
+    for (int i = 0; i < 18; i++) {
         gotoxy(2, STARTINDEX + i);
         printf("                                                              "
                "    "
