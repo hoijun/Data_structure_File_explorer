@@ -157,39 +157,36 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
             } else if (n == ENTER) {
                 if (direct == STARTINDEX - 3) {
 
+                    list<sortfile> *sortedFile = Files.getList();
+
                     if (leftright == LRINDEX) { // sort
                         gotoxy(5, 7);
                         printf("|  Name ▲ |  Size   |  Time   |   \033[36mSorted by : "
                                "name ascending\033[0m\n");
                         direct = menuSort(Files);
-                        list<sortfile> *sortedFile = Files.getList();
-                        it1 = sortedFile->begin();
-                        printfile(sortedFile);
                         gotoxy(3, 29);
                         printf("sort function");
                     } else if (leftright == LRINDEX + 11) {
                         gotoxy(3, 29);
                         delete_main(); // 파일, 디렉토리 삭제하기
                         direct = menuSort(Files);
-                        list<sortfile> *sortedFile = Files.getList();
-
-                        it1 = sortedFile->begin();
                     } else if (leftright == LRINDEX + (11 * 2)) {
                         gotoxy(3, 29);
                         makefile_main(); //파일 만들기
                         direct = menuSort(Files);
-                        list<sortfile> *sortedFile = Files.getList();
-                        it1 = sortedFile->begin();
                     } else if (leftright == LRINDEX + (11 * 3)) {
                         gotoxy(3, 29);
                         makedirectory_main(); //디렉토리 만들기
                         direct = menuSort(Files);
-                        list<sortfile> *sortedFile = Files.getList();
-                        it1 = sortedFile->begin();
                     } else if (leftright == LRINDEX + (11 * 4)) {
                         gotoxy(3, 29);
                         printf("sort function");
                     }
+                    
+                    sortedFile = Files.getList();
+                    it1 = sortedFile->begin();
+                    clearWindow();
+                    printfile(sortedFile);
 
                 } else if (it1->tm.find("d") !=
                            string::npos) { // 디렉토리 파일일시
