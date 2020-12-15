@@ -409,9 +409,11 @@ int keycontrol() { // 키보드 입력
 int menuSort(ListSort &files){
     const int rowIndex = 7;
     int corsur = LRINDEX;
-    const int updownIndex = LRINDEX + 8;
+    const int updownIndex = LRINDEX + 6;
     int triangle = updownIndex;
-    int checkUpDown = 0;    //0이면 upward, 1이면 downward
+    bool nameCheck = true;    //true => upward, false => downward
+    bool sizeCheck = true;
+    bool timeCheck = true;
     gotoxy(corsur, rowIndex - 1);
     printf(" ");
     gotoxy(corsur, rowIndex);
@@ -424,24 +426,51 @@ int menuSort(ListSort &files){
             printf(" ");
             gotoxy(corsur, rowIndex);
             printf(">");
+            triangle = triangle - 10;
+            gotoxy(triangle + 10, rowIndex);
+            printf(" ");
+            gotoxy(triangle, rowIndex);
+            if (nameCheck)
+                printf("▲");
+            else
+                printf("▼");
+
         } else if (key == RIGHT && corsur < LRINDEX + 20) {
             corsur = corsur + 10;
             gotoxy(corsur - 10, rowIndex);
             printf(" ");
             gotoxy(corsur, rowIndex);
             printf(">");
-        } else if (key == DOWN){
+            triangle = triangle + 10;
+            gotoxy(triangle - 10, rowIndex);
+            printf(" ");
+            gotoxy(triangle, rowIndex);
+            if (nameCheck)
+                printf("▲");
+            else
+                printf("▼");
+        } else if (key == DOWN) {
             gotoxy(LRINDEX - 3, rowIndex);
             printf("                                ");
             gotoxy(3, rowIndex + 2);
             printf(">");
             return STARTINDEX;
-        } else if (key == UP){
+        } else if (key == UP) {
             gotoxy(LRINDEX - 3, rowIndex);
             printf("                                ");
             gotoxy(LRINDEX, rowIndex - 1);
             printf(">");
             return STARTINDEX - 3;
+        } else if (key == ENTER) {
+            if (corsur == LRINDEX){
+
+            }
+            else if(corsur == LRINDEX + 10){
+
+            }
+            else if (corsur == LRINDEX + 20){
+
+            }
         }
     }
 }
