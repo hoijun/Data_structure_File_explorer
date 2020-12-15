@@ -15,6 +15,8 @@
 #define UP 0
 #define DOWN 1
 #define QUIT 99
+#define ZIP 3
+#define ENTER 2
 using namespace std;
 
 string fileTM(const struct stat *fileInfo); // 파일 권한
@@ -24,14 +26,15 @@ void printfile(list<sortfile> *f);          // 파일 출력
 char *timeToString(struct tm *t);           // m_time 년도월 시분초 변경
 int getch();      // 키보드 입력(원리 잘모름)
 int keycontrol(); // 키보드 입력
-int main() {
-    struct stat fileInfo;
-    DIR *dirp;
-    struct dirent *dirInfo;
-    struct passwd *userInfo;
-    while (1) {
-        ListSort Files = ListSort();
+#define MAX_PATH_LEN 1024
 
+int main() {
+    while (1) {
+        struct stat fileInfo;
+        DIR *dirp;
+        struct dirent *dirInfo;
+        struct passwd *userInfo;
+        ListSort Files = ListSort(); // 파일 담을 리스트
         char cwd[MAX_PATH_LEN + 1] = {
             '\0',
         };
@@ -58,12 +61,15 @@ int main() {
             Files.add(userInfo->pw_name, fileInfo.st_mtime, dirInfo->d_name, Tm,
                       fileInfo.st_size);
         }
-        Files.sortNameUp();
+        Files.sortNameUp(); // 파일 이름순 정렬
         int direct = 7;
         gotoxy(3, direct); // >의 처음 위치
         printf(">");
+        printfile(Files.getList()); // 파일 출력
 
-        printfile(Files.getList());
+        list<sortfile> *file = Files.getList();
+        list<sortfile>::iterator it1;
+        it1 = file->begin();
         while (1) {
             int n = keycontrol(); // 키보드 입력
             if (n == UP) {
@@ -73,6 +79,7 @@ int main() {
                     printf(" ");
                     gotoxy(3, direct);
                     printf(">");
+                    it1--;
                 }
             } else if (n == DOWN) {
                 if (direct < 24 &&
@@ -82,6 +89,25 @@ int main() {
                     printf(" ");
                     gotoxy(3, direct);
                     printf(">");
+                    it1++;
+                }
+            } else if (n == ENTER) {
+                if (it1->tm.find("d") != string::npos) { // 디렉토리 파일일시
+                    if (it1->filename.compare(".") == 0 ||
+                        it1->filename.compare("..") ==
+                            0) { //. .. 이면 그냥 이동
+                        if (chdir(it1->filename.c_str()) == -1) {
+                            perror("chdir()	error!");
+                            exit(-1);
+                        }
+                    } else {
+                        if (chdir(("./" + it1->filename).c_str()) ==
+                            -1) { // . .. 이 아니면 ./을 앞에 붙여서 이동
+                            perror("chdir()	error!");
+                            exit(-1);
+                        }
+                    }
+                    break;
                 }
             } else if (n == QUIT)
                 exit(-1);
@@ -89,7 +115,6 @@ int main() {
     }
     return 0;
 }
-
 string fileTM(const struct stat *fileInfo) {
     string temp;
     if (S_ISREG(fileInfo->st_mode)) {
@@ -239,10 +264,10 @@ void frame() {
     printf("│                                                              "
            "    "
            "             │\n");
-    printf("│                                                              "
-           "    "
-           "             │\n");
-    printf("│                                                              "
+    printf("│──────────────────────────────────────────────────────────────"
+           "────"
+           "─────────────│\n");
+    printf("│ w: up s: down q: quit                                        "
            "    "
            "             │\n");
     printf("│                                                              "
@@ -292,7 +317,7 @@ int getch() {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldattr); // 원래의 설정으로 복구
     return c;
 }
-int keycontrol() {
+int keycontrol() { // 키보드 입력
     char t = getch();
     if (t == 'w') // w 입력시 위로
         return UP;
@@ -300,4 +325,8 @@ int keycontrol() {
         return DOWN;
     else if (t == 'q') // q 입력시 종료
         return QUIT;
+    else if (t == 'z')
+        return ZIP;
+    else if (t == 10)
+        return ENTER;
 }
