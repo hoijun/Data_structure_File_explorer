@@ -304,8 +304,10 @@ int main() {
                     system(("tar -xzvf" + it1->filename).c_str());
                     break;
                 }
-            } else if (n == QUIT)
+            } else if (n == QUIT){
+                system("clear");
                 exit(-1);
+            }
         }
     }
     return 0;
