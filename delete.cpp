@@ -9,9 +9,11 @@ int delete_main() {
 
     int nResult = remove(Path);
     if (nResult == 0) {
-        printf("삭제 성공\n");
+
+        printf(" 삭제 성공\n");
     } else if (nResult == -1) {
-        perror("삭제 실패\n");
+        
+        perror(" 삭제 실패\n");
     }
     return 0;
 }

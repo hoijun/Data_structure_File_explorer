@@ -7,9 +7,9 @@ using namespace std;
 int makedirectory_main() {
 
     char name[100];
-    cout << "directory name : ";
+    cout << "만들 디렉토리 이름 : ";
     cin >> name;
-    // Creating a directory
+    //디렉토리 생성
     if (mkdir(name, 0777) == -1)
         cerr << "Error :  " << strerror(errno) << endl;
     //안될경우 메세지 출력
