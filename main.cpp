@@ -103,6 +103,11 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
         list<sortfile>::iterator it1;
         it1 = file->begin();
         while (1) {
+            if (direct == STARTINDEX){  // 반복문 진행으로 인한 커서 증발 현상 해결
+                gotoxy(3, STARTINDEX);
+                printf(">");
+            }
+
             if (zippoint == 99)
                 break;
             int n = keycontrol(); // 키보드 입력
@@ -168,8 +173,6 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
                         printf("|  Name ▲ |  Size   |  Time   |   \033[36mSorted by : "
                                "name ascending\033[0m\n");
                         direct = menuSort(Files);
-                        gotoxy(3, 29);
-                        printf("sort function");
                     } else if (leftright == LRINDEX + 11) {
                         gotoxy(3, 28);
                         delete_main(); // 파일, 디렉토리 삭제하기
@@ -580,7 +583,7 @@ int menuSort(ListSort &files) {
         } else if (key == DOWN) {
             gotoxy(LRINDEX - 3, rowIndex);
             printf("                                                                ");
-            gotoxy(3, rowIndex + 2);
+            gotoxy(3, STARTINDEX);
             printf(">");
             return STARTINDEX;
         } else if (key == UP) {
