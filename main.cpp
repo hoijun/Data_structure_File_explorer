@@ -1,6 +1,7 @@
 #include "sort.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <dirent.h>
 #include <fcntl.h>
 #include <pwd.h>
@@ -16,6 +17,7 @@
 #define DOWN 1
 #define QUIT 99
 #define ZIP 3
+#define UNZIP 4
 #define ENTER 2
 using namespace std;
 
@@ -106,6 +108,83 @@ int main() {
                             exit(-1);
                         }
                     }
+                    break;
+                }
+            } else if (n == ZIP) {
+                int direct2 = direct;
+                gotoxy(5, 6);
+                printf("압축할 파일 선택중...");
+                list<sortfile>::iterator it2 = it1;
+                string zipfilename = "";
+                while (1) {
+                    gotoxy(3, 26);
+                    printf("선택한 파일들: ");
+                    gotoxy(18, 26);
+                    printf("%s", zipfilename.c_str());
+                    int n2 = keycontrol();
+                    if (n2 == UP) {
+                        if (direct2 > 7) { // > 위로 이동
+                            direct2--;
+                            gotoxy(3, direct2 + 1);
+                            printf(" ");
+                            gotoxy(3, direct2);
+                            printf(">");
+                            it2--;
+                        }
+                    } else if (n2 == DOWN) {
+                        if (direct2 < 24 &&
+                            direct2 < Files.listSize() + 6) { // > 아래로 이동
+                            direct2++;
+                            gotoxy(3, direct2 - 1);
+                            printf(" ");
+                            gotoxy(3, direct2);
+                            printf(">");
+                            it2++;
+                        }
+                    } else if (n2 == ENTER) {
+                        if (it2->filename.compare(".") != 0 &&
+                            it2->filename.compare("..") != 0 &&
+                            zipfilename.find(it2->filename) == string::npos) {
+                            zipfilename.append((it2->filename + " "));
+                        }
+                    } else if (n2 == ZIP) {
+                        if (zipfilename.length() > 0) {
+                            system("clear");
+                            char temp[1001];
+                            printf("압축 파일의 이름을 작성해 주세요. ");
+                            scanf("%s", temp);
+                            string name = temp;
+                            system(("tar -czvf " + name + ".tar.gz" + " " +
+                                    zipfilename)
+                                       .c_str());
+                            gotoxy(3, direct2);
+                            printf(" ");
+                            gotoxy(3, direct);
+                            printf(">");
+                            gotoxy(5, 6);
+                            printf("                     ");
+                            gotoxy(3, 26);
+                            printf("                                           "
+                                   "    "
+                                   "                              ");
+                            break;
+                        }
+                    } else if (n2 == QUIT) {
+                        gotoxy(3, direct2);
+                        printf(" ");
+                        gotoxy(3, direct);
+                        printf(">");
+                        gotoxy(5, 6);
+                        printf("                     ");
+                        gotoxy(3, 26);
+                        printf("                                               "
+                               "                              ");
+                        break;
+                    }
+                }
+            } else if (n == UNZIP) {
+                if (it1->filename.find(".tar.gz") != string::npos) {
+                    system(("tar -xzvf" + it1->filename).c_str());
                     break;
                 }
             } else if (n == QUIT)
@@ -266,13 +345,13 @@ void frame() {
     printf("│──────────────────────────────────────────────────────────────"
            "────"
            "─────────────│\n");
-    printf("│ w: up s: down q: quit                                        "
-           "    "
-           "             │\n");
     printf("│                                                              "
            "    "
            "             │\n");
     printf("│                                                              "
+           "    "
+           "             │\n");
+    printf("│ w: up s: down q: quit z: zip x: unzip                        "
            "    "
            "             │\n");
     printf("└──────────────────────────────────────────────────────────────"
@@ -326,6 +405,8 @@ int keycontrol() { // 키보드 입력
         return QUIT;
     else if (t == 'z')
         return ZIP;
+    else if (t == 'x')
+        return UNZIP;
     else if (t == 10)
         return ENTER;
 }
