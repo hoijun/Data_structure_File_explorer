@@ -14,9 +14,15 @@
 #define MAX_PATH_LEN 1024
 #define UP 0
 #define DOWN 1
+#define LEFT 2
+#define RIGHT 3
 #define QUIT 99
-#define ZIP 3
-#define ENTER 2
+#define ZIP 111
+#define ENTER 10
+
+#define STARTINDEX 9
+#define LASTINDEX 26
+#define LRINDEX 7
 using namespace std;
 
 string fileTM(const struct stat *fileInfo); // 파일 권한
@@ -50,6 +56,8 @@ int main() {
         frame();
         gotoxy(5, 4);
         printf("Current Directory: %s\n", cwd);
+        gotoxy(5, 6);
+        printf("|   Sort   |   Creat  |  Delete  |  Select Mode  |\n");
         dirp = opendir(cwd);
         while ((dirInfo = readdir(dirp)) != NULL) {
             if (stat(("%s/%s", cwd, dirInfo->d_name), &fileInfo) == -1) {
@@ -62,7 +70,8 @@ int main() {
                       fileInfo.st_size);
         }
         Files.sortNameUp(); // 파일 이름순 정렬
-        int direct = 7;
+        int direct = STARTINDEX;
+        int leftright = LRINDEX;
         gotoxy(3, direct); // >의 처음 위치
         printf(">");
         printfile(Files.getList()); // 파일 출력
@@ -73,7 +82,14 @@ int main() {
         while (1) {
             int n = keycontrol(); // 키보드 입력
             if (n == UP) {
-                if (direct > 7) { // > 위로 이동
+                if (direct == STARTINDEX) {
+                    direct = direct - 3;
+                    gotoxy(3, direct + 3);
+                    printf(" ");
+                    gotoxy(7, direct);
+                    printf(">");
+                    leftright = LRINDEX;
+                } else if (direct > STARTINDEX) { // > 위로 이동
                     direct--;
                     gotoxy(3, direct + 1);
                     printf(" ");
@@ -82,14 +98,38 @@ int main() {
                     it1--;
                 }
             } else if (n == DOWN) {
-                if (direct < 24 &&
-                    direct < Files.listSize() + 6) { // > 아래로 이동
+                if (direct == STARTINDEX - 3) {
+                    direct = direct + 3;
+                    gotoxy(leftright, direct - 3);
+                    printf(" ");
+                    gotoxy(3, direct);
+                    printf(">");
+                    leftright = LRINDEX;
+                } else if (direct < LASTINDEX &&
+                           direct < Files.listSize() + STARTINDEX -
+                                        1) { // > 아래로 이동
                     direct++;
                     gotoxy(3, direct - 1);
                     printf(" ");
                     gotoxy(3, direct);
                     printf(">");
                     it1++;
+                }
+            } else if (n == LEFT && direct == STARTINDEX - 3) {
+                if (leftright > LRINDEX) {
+                    leftright = leftright - 11;
+                    gotoxy(leftright + 11, direct);
+                    printf(" ");
+                    gotoxy(leftright, direct);
+                    printf(">");
+                }
+            } else if (n == RIGHT && direct == STARTINDEX - 3) {
+                if (leftright < LRINDEX + 33) {
+                    leftright = leftright + 11;
+                    gotoxy(leftright - 11, direct);
+                    printf(" ");
+                    gotoxy(leftright, direct);
+                    printf(">");
                 }
             } else if (n == ENTER) {
                 if (it1->tm.find("d") != string::npos) { // 디렉토리 파일일시
@@ -210,6 +250,11 @@ void frame() {
     printf("│                                                              "
            "    "
            "             │\n");
+
+    printf("│                                                              "
+           "    "
+           "             │\n");
+
     printf("│                                                              "
            "    "
            "             │\n");
@@ -264,6 +309,10 @@ void frame() {
     printf("│                                                              "
            "    "
            "             │\n");
+    printf("│                                                              "
+           "    "
+           "             │\n");
+
     printf("│──────────────────────────────────────────────────────────────"
            "────"
            "─────────────│\n");
@@ -288,7 +337,7 @@ void printfile(list<sortfile> *f) {
     for (it = f->begin(); it != f->end(); it++) {
         if (i == 18)
             break;
-        gotoxy(5, i + 7);
+        gotoxy(5, i + STARTINDEX);
         printf("%s", it->tm.c_str());
         printf("      %-8s", it->username.c_str());
         printf("%8ld", it->size);
@@ -323,6 +372,10 @@ int keycontrol() { // 키보드 입력
         return UP;
     else if (t == 's') // s 입력시 아래로
         return DOWN;
+    else if (t == 'a') // a 입력시 좌측으로
+        return LEFT;
+    else if (t == 'd') // d 입력시 우측으로
+        return RIGHT;
     else if (t == 'q') // q 입력시 종료
         return QUIT;
     else if (t == 'z')
