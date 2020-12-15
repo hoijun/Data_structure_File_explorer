@@ -1,5 +1,6 @@
 #include "sort.hpp"
 
+#include "gotoxy.h"
 #include "delete.h"
 #include "makedirectory.h"
 #include "makefile.h"
@@ -170,17 +171,17 @@ void clearWindow(); // 창에 있는 파일 목록 삭제
                         gotoxy(3, 29);
                         printf("sort function");
                     } else if (leftright == LRINDEX + 11) {
-                        gotoxy(3, 29);
+                        gotoxy(3, 28);
                         delete_main(); // 파일, 디렉토리 삭제하기
                         direct = menuSort(Files);
                         goto TOFIRST;
                     } else if (leftright == LRINDEX + (11 * 2)) {
-                        gotoxy(3, 29);
+                        gotoxy(3, 28);
                         makefile_main(); //파일 만들기
                         direct = menuSort(Files);
                         goto TOFIRST;
                     } else if (leftright == LRINDEX + (11 * 3)) {
-                        gotoxy(3, 29);
+                        gotoxy(3, 28);
                         makedirectory_main(); //디렉토리 만들기
                         direct = menuSort(Files);
                         goto TOFIRST;
@@ -373,10 +374,8 @@ string fileTM(const struct stat *fileInfo) {
     }
     return temp;
 }
-void gotoxy(int x, int y) {
-    printf("\033[%d;%df", y, x);
-    fflush(stdout);
-}
+
+
 void frame() {
     gotoxy(1, 1);
     printf("┌──────────────────────────────────────────────────────────────"

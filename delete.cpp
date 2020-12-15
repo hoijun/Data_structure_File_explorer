@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "gotoxy.h"
 
 int delete_main() {
 
@@ -9,11 +10,13 @@ int delete_main() {
 
     int nResult = remove(Path);
     if (nResult == 0) {
+        gotoxy(3, 29);
+        printf("삭제 성공\n");
 
-        printf(" 삭제 성공\n");
     } else if (nResult == -1) {
-        
-        perror(" 삭제 실패\n");
+        gotoxy(3, 29);
+        perror("삭제 실패\n");
     }
+
     return 0;
 }
