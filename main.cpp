@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
+#include <iostream>
 #define MAX_PATH_LEN 1024
 #define UP 0
 #define DOWN 1
@@ -31,6 +32,12 @@
 #define LRINDEX 7
 using namespace std;
 
+typedef struct _Check {
+    bool nameUp;
+    bool sizeUp;
+    bool timeUp;
+} Check;
+
 string fileTM(const struct stat *fileInfo); // 파일 권한
 void gotoxy(int x, int y);                  // 좌표 이동
 void frame();                               // 틀 출력
@@ -39,9 +46,12 @@ char *timeToString(struct tm *t);           // m_time 년도월 시분초 변경
 int getch();                   // 키보드 입력(원리 잘모름)
 int keycontrol();              // 키보드 입력
 int menuSort(ListSort &files); // sort menu
+bool checkUp(Check check, int corsur);  // check sort direction
+void clearWindow(); // 창에 있는 파일 목록 삭제
+
 #define MAX_PATH_LEN 1024
 
-int main() {
+    int main() {
     while (1) {
         int zippoint = 0;
         struct stat fileInfo;
@@ -148,10 +158,12 @@ int main() {
                 if (direct == STARTINDEX - 3) {
                     if (leftright == LRINDEX) { // sort
                         gotoxy(5, 7);
-                        printf("|  Name ▲ |  Size   |  Time   |\n");
+                        printf("|  Name ▲ |  Size   |  Time   |   Sorted by : "
+                               "name ascending\n");
                         direct = menuSort(Files);
                         list<sortfile> *sortedFile = Files.getList();
                         it1 = sortedFile->begin();
+                        printfile(sortedFile);
                         gotoxy(3, 29);
                         printf("sort function");
                     } else if (leftright == LRINDEX + 11) {
@@ -529,9 +541,7 @@ int menuSort(ListSort &files) {
     int corsur = LRINDEX;
     const int updownIndex = LRINDEX + 6;
     int triangle = updownIndex;
-    bool nameCheck = true; // true => upward, false => downward
-    bool sizeCheck = true;
-    bool timeCheck = true;
+    Check check{true, true, true};
     gotoxy(corsur, rowIndex - 1);
     printf(" ");
     gotoxy(corsur, rowIndex);
@@ -548,7 +558,7 @@ int menuSort(ListSort &files) {
             gotoxy(triangle + 10, rowIndex);
             printf(" ");
             gotoxy(triangle, rowIndex);
-            if (nameCheck)
+            if (checkUp(check, corsur))
                 printf("▲");
             else
                 printf("▼");
@@ -563,29 +573,89 @@ int menuSort(ListSort &files) {
             gotoxy(triangle - 10, rowIndex);
             printf(" ");
             gotoxy(triangle, rowIndex);
-            if (nameCheck)
+            if (checkUp(check, corsur))
                 printf("▲");
             else
                 printf("▼");
         } else if (key == DOWN) {
             gotoxy(LRINDEX - 3, rowIndex);
-            printf("                                ");
+            printf("                                                                ");
             gotoxy(3, rowIndex + 2);
             printf(">");
             return STARTINDEX;
         } else if (key == UP) {
             gotoxy(LRINDEX - 3, rowIndex);
-            printf("                                ");
+            printf("                                                                ");
             gotoxy(LRINDEX, rowIndex - 1);
             printf(">");
             return STARTINDEX - 3;
         } else if (key == ENTER) {
-            if (corsur == LRINDEX) {
+            string direction;
+            if (corsur == LRINDEX) {    // name
+                if (check.nameUp){
+                    direction = "ascending ";
+                    files.sortNameUp();
+                } else {
+                    direction = "descending";
+                    files.sortNameDown();
+                }
+                gotoxy(LRINDEX + 44, rowIndex);
+                cout << "name " << direction;
+                check.nameUp = !check.nameUp;   // enter 입력했으므로 화살표 방향 바꿈
 
-            } else if (corsur == LRINDEX + 10) {
+            } else if (corsur == LRINDEX + 10) {    // size
+                if (check.sizeUp) {
+                    direction = "ascending ";
+                    files.sortSizeUp();
+                } else {
+                    direction = "descending";
+                    files.sortSizeDown();
+                }
+                gotoxy(LRINDEX + 44, rowIndex);
+                cout << "size " << direction;
+                check.sizeUp = !check.sizeUp;
 
-            } else if (corsur == LRINDEX + 20) {
+            } else if (corsur == LRINDEX + 20) {    // time
+                if (check.timeUp) {
+                    direction = "ascending ";
+                    files.sortTimeUp();
+                } else {
+                    direction = "descending";
+                    files.sortSizeDown();
+                }
+                gotoxy(LRINDEX + 44, rowIndex);
+                cout << "time " << direction;
+                check.timeUp = !check.timeUp;
+
             }
+            gotoxy(triangle, rowIndex);
+            if (checkUp(check, corsur))
+                printf("▲");
+            else
+                printf("▼");
+
+            clearWindow();
+            printfile(files.getList());
         }
+    }
+}
+bool checkUp(Check check, int corsur){
+    if (corsur == LRINDEX){
+        return check.nameUp;
+    }
+    else if (corsur == LRINDEX + 10){
+        return check.sizeUp;
+    }
+    else if (corsur == LRINDEX + 20){
+        return check.timeUp;
+    }
+    return true;
+}
+void clearWindow() {
+    for (int i = 0; i < 18; i++){
+        gotoxy(2, STARTINDEX + i);
+        printf("                                                              "
+               "    "
+               "                   ");
     }
 }
