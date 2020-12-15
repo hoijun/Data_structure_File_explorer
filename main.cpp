@@ -1,5 +1,9 @@
 #include "sort.hpp"
 
+#include "delete.h"
+#include "makedirectory.h"
+#include "makefile.h"
+
 #include <algorithm>
 #include <dirent.h>
 #include <fcntl.h>
@@ -58,7 +62,7 @@ int main() {
         gotoxy(5, 4);
         printf("Current Directory: %s\n", cwd);
         gotoxy(5, 6);
-        printf("|   Sort   |   Creat  |  Delete  |  Select Mode  |\n");
+        printf("|   Sort   |  Delete  |   File  |   Directory   | Select Mode  |\n");
         dirp = opendir(cwd);
         while ((dirInfo = readdir(dirp)) != NULL) {
             if (stat(("%s/%s", cwd, dirInfo->d_name), &fileInfo) == -1) {
@@ -146,14 +150,31 @@ int main() {
                     }
                     else if (leftright == LRINDEX + 11){
                         gotoxy(3, 29);
-                        printf("creat function");
-                    } else if (leftright == LRINDEX + (11 * 2)) {
-                        gotoxy(3, 29);
-                        printf("delete function");
-                    } else if (leftright == LRINDEX + (11 * 3)) {
-                        gotoxy(3, 29);
-                        printf("select function");
-                    }
+                        delete_main();// 파일, 디렉토리 삭제하기
+                            direct = menuSort(Files);
+                            list<sortfile> *sortedFile = Files.getList();
+
+                            it1 = sortedFile->begin();
+                        }
+                        else if (leftright == LRINDEX + (11 * 2)) {
+                            gotoxy(3, 29);
+                            makefile_main(); //파일 만들기
+                            direct = menuSort(Files);
+                            list<sortfile> *sortedFile = Files.getList();
+                            it1 = sortedFile->begin();
+                        }
+                        else if (leftright == LRINDEX + (11 * 3)) {
+                            gotoxy(3, 29);
+                            makedirectory_main(); //디렉토리 만들기
+                            direct = menuSort(Files);
+                            list<sortfile> *sortedFile = Files.getList();
+                            it1 = sortedFile->begin();
+                        }
+                        else if (leftright == LRINDEX + (11 * 4)) {
+                            gotoxy(3, 29);
+                            printf("sort function");
+                        }
+
                 }
                 else if (it1->tm.find("d") != string::npos) { // 디렉토리 파일일시
                     if (it1->filename.compare(".") == 0 ||
@@ -173,6 +194,7 @@ int main() {
                     break;
                 }
             } else if (n == QUIT)
+
                 exit(-1);
         }
     }
@@ -340,6 +362,9 @@ void frame() {
            "────"
            "─────────────│\n");
     printf("│ w: up s: down q: quit                                        "
+           "    "
+           "             │\n");
+    printf("│                                                              "
            "    "
            "             │\n");
     printf("│                                                              "
