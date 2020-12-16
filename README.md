@@ -2,7 +2,8 @@
 자료구조실습 7조
 
 파일 탐색기 제작
-
+<br/>
+<br/>
 컴파일 방법
    
       g++ main.cpp sort.cpp makedirectory.cpp makefile.cpp delete.cpp gotoxy.cpp move.cpp rename.cpp -o main.out -std=c++14
