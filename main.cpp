@@ -52,6 +52,8 @@ void clearWindow();                    // 창에 있는 파일 목록 삭제
 
 #define MAX_PATH_LEN 1024
 
+string sortInfo = "name ascending";
+
 int main() {
     while (1) {
     TOFIRST:
@@ -171,9 +173,9 @@ int main() {
 
                     if (leftright == LRINDEX) { // sort
                         gotoxy(5, 7);
-                        printf("|  Name ▲ |  Size   |  Time   |   "
-                               "\033[36mSorted by : "
-                               "name ascending\033[0m\n");
+                        cout<<"|  Name ▲ |  Size   |  Time   |   "
+                               "\033[36mSorted by : "<<sortInfo<<
+                               "\033[0m\n";
                         direct = menuSort(Files);
                     } else if (leftright == LRINDEX + 11) {
                         gotoxy(3, 28);
@@ -612,6 +614,8 @@ int menuSort(ListSort &files) {
                     direction = "descending";
                     files.sortNameDown();
                 }
+                sortInfo = "name " + direction;
+
                 gotoxy(LRINDEX + 44, rowIndex);
                 cout << "\033[36mname " << direction << "\033[0m";
                 check.nameUp =
@@ -625,6 +629,8 @@ int menuSort(ListSort &files) {
                     direction = "descending";
                     files.sortSizeDown();
                 }
+                sortInfo = "size " + direction;
+
                 gotoxy(LRINDEX + 44, rowIndex);
                 cout << "\033[36msize " << direction << "\033[0m";
                 check.sizeUp = !check.sizeUp;
@@ -635,8 +641,10 @@ int menuSort(ListSort &files) {
                     files.sortTimeUp();
                 } else {
                     direction = "descending";
-                    files.sortSizeDown();
+                    files.sortTimeDown();
                 }
+                sortInfo = "time " + direction;
+
                 gotoxy(LRINDEX + 44, rowIndex);
                 cout << "\033[36mtime " << direction << "\033[0m";
                 check.timeUp = !check.timeUp;
