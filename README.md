@@ -4,30 +4,32 @@
 파일 탐색기 제작
 
 컴파일 방법
+   
       g++ main.cpp sort.cpp makedirectory.cpp makefile.cpp delete.cpp gotoxy.cpp move.cpp rename.cpp -o main.out -std=c++14
 
 프로그램 이용 방법:
 
-w: 위로 커서 이동
+Normal mode
 
-s: 아래로 커서 이동
+      w: 위로 커서 이동
 
-a: 커서가 위의 메뉴에 있으면 왼쪽으로 커서 이동
+      s: 아래로 커서 이동
 
-d: 커서가 위의 메뉴에 있으면 오른쪽으로 커서 이동
+      a: 커서가 위의 메뉴에 있으면 왼쪽으로 커서 이동
 
-q: 프로그램 종료
+      d: 커서가 위의 메뉴에 있으면 오른쪽으로 커서 이동
 
-z: Zip mode로 변경 
+      q: 프로그램 종료
 
-x: 압축 해제
+      z: Zip mode로 변경 
 
-m: Move mode로 변경
+      x: 압축 해제
 
-r: 이름 변경(누르면 새로운 파일 이름 작성 후 이름 변경)
+      m: Move mode로 변경
 
-enter: 디렉토리 이동(커서가 디렉토리에 있을 경우) , 메뉴 선택(커서가 위의 메뉴에 있을 경우)
+      r: 이름 변경(누르면 새로운 파일 이름 작성 후 이름 변경)
 
+      enter: 디렉토리 이동(커서가 디렉토리에 있을 경우) , 메뉴 선택(커서가 위의 메뉴에 있을 경우)
 
 Zip mode(위아래 커서는 동일)
 
@@ -36,7 +38,6 @@ Zip mode(위아래 커서는 동일)
       z: 추가한 파일 압축(누르면 압축 파일 이름 작성 후 압축)
 
       q: Zip mode 종료
-
 
 Move mode(위아래 커서는 동일)
 
