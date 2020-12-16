@@ -10,6 +10,7 @@
 
 <br/>
 프로그램 이용 방법:
+
 <br/>
 Normal mode
 
@@ -53,6 +54,7 @@ Move mode(위아래 커서는 동일)
 
 <br/>
 위의 메뉴
+
 <br/>
 Sort
       
