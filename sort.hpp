@@ -4,15 +4,13 @@
 using namespace std;
 
 // 파일 정보 담는 클래스
-// 파일 이름, 파일의 마지막 edit 시간, 파일 사이즈
 class sortfile { // 파일 정렬 클래스
   public:
-    string tm;
-    string username;
-    time_t time;
-    string filename;
-    off_t size;
-    string timestring;
+    string tm;          // 권한
+    string username;    // 유저 이름
+    time_t time;        // 수정 시간
+    string filename;    // 파일 이름
+    off_t size;         // 파일 사이즈
     sortfile(string u, time_t t, string f, string m, off_t s) {
         username = u;
         time = t;
