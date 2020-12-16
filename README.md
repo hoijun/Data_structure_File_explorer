@@ -3,7 +3,8 @@
 
 파일 탐색기 제작
 
-컴파일 방법: g++ main.cpp sort.cpp makedirectory.cpp makefile.cpp delete.cpp gotoxy.cpp move.cpp rename.cpp -o main.out -std=c++14
+컴파일 방법
+      g++ main.cpp sort.cpp makedirectory.cpp makefile.cpp delete.cpp gotoxy.cpp move.cpp rename.cpp -o main.out -std=c++14
 
 프로그램 이용 방법:
 
@@ -30,25 +31,27 @@ enter: 디렉토리 이동(커서가 디렉토리에 있을 경우) , 메뉴 선
 
 Zip mode(위아래 커서는 동일)
 
-p: 압축할 파일 추가
+      p: 압축할 파일 추가
 
-z: 추가한 파일 압축(누르면 압축 파일 이름 작성 후 압축)
+      z: 추가한 파일 압축(누르면 압축 파일 이름 작성 후 압축)
 
-q: Zip mode 종료
+      q: Zip mode 종료
 
 
 Move mode(위아래 커서는 동일)
 
-p: 이동할 파일 추가
+      p: 이동할 파일 추가
 
-m: 추가한 파일 이동(누르면 경로 작성 후 이동)
+      m: 추가한 파일 이동(누르면 경로 작성 후 이동)
 
-q: Move mode 종료
+      q: Move mode 종료
 
 
 위의 메뉴
 
-Sort: 1. Name 선택 시 이름순으로 파일 정렬
+
+Sort
+      1. Name 선택 시 이름순으로 파일 정렬
       
       2. Size 선택 시 파일 크기순으로 파일 정렬
       
