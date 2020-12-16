@@ -1,17 +1,17 @@
 # ___Data_structure_File_explorer___
-## 자료구조실습 7조 프로젝트
+## __자료구조실습 7조 프로젝트__
 
       파일 탐색기 제작
 
 <br/>
 
-## 컴파일 방법
+## __컴파일 방법__
    
       g++ main.cpp sort.cpp makedirectory.cpp makefile.cpp delete.cpp gotoxy.cpp move.cpp rename.cpp -o main.out -std=c++14
 
 <br/>
 
-## 프로그램 이용 방법:
+## __프로그램 이용 방법__
 
 <br/>
 
