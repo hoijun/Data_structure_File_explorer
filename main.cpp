@@ -226,6 +226,8 @@ int main() {
                     gotoxy(5, 8);
                     printf("압축할 파일 선택중...");
                     list<sortfile>::iterator it2 = it1;
+                    list<string> temp1;
+                    list<string>::iterator it4;
                     string zipfilename = "";
                     while (1) {
                         gotoxy(3, 28);
@@ -255,11 +257,20 @@ int main() {
                             }
                         } else if (n2 == PUSH) {
                             if (it2->filename.compare(".") != 0 &&
-                                it2->filename.compare("..") != 0 &&
-                                zipfilename.find(it2->filename) ==
-                                    string::npos) {
-                                zipfilename.append((it2->filename + " "));
+                                it2->filename.compare("..") != 0) {
+                                for (it4 = temp1.begin(); it4 != temp1.end();
+                                     it4++) {
+                                    if (*it4 == it2->filename) {
+                                        break;
+                                    }
+                                }
+                                if (*it4 == it2->filename) {
+                                } else {
+                                    zipfilename.append((it2->filename + " "));
+                                    temp1.push_back(it2->filename);
+                                }
                             }
+
                         } else if (n2 == ZIP) {
                             if (zipfilename.length() > 0) {
                                 zippoint = 99;
