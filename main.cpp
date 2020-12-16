@@ -583,8 +583,8 @@ void frame() {
            "───────────────────│\n");
     printf("│ \033[1;32mNormal mode:\033[0m w, a, s, d : move "
            "\033[33m/\033[0m q: quit \033[33m/\033[0m z: Zip mode "
-           "\033[33m/\033[0m x: unzip m: Mo"
-           "ve r"
+           "\033[33m/\033[0m x: unzip\033[33m/\033[0mm: Mo"
+           "ve\033[33m/\033[0mr"
            ": rename │\n");
     printf("│ \033[1;32mZip mode:\033[0m p: push files for zip \033[33m/"
            "\033[0m z: express "
@@ -593,9 +593,9 @@ void frame() {
            "               │\n");
     printf("│ \033[1;32mMove mode:\033[0m p: push files for move \033[33m/"
            "\033[0m m: move "
-           "files \033[33m/\033[0m q: move  "
+           "files \033[33m/\033[0m q: quit move  "
            "    "
-           "                   │\n");
+           "              │\n");
     printf("└──────────────────────────────────────────────────────────────"
            "────"
            "───────────────────┘\n");
