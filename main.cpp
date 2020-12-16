@@ -79,8 +79,9 @@ int main() {
         gotoxy(5, 4);
         printf("Current Directory: %s\n", cwd);
         gotoxy(5, 6);
-        printf("|   Sort   |  Delete  |   File  |   Directory   | Select Mode  "
-               "|\n");
+        printf("|   \033[1;34mSort\033[0m   |  \033[1;34mDelete\033[0m  |   "
+               "\033[1;34mFile\033[0m  |   "
+               "\033[1;34mDirectory\033[0m   |\n");
         dirp = opendir(cwd);
         while ((dirInfo = readdir(dirp)) != NULL) {
             if (stat(("%s/%s", cwd, dirInfo->d_name), &fileInfo) == -1) {
@@ -186,11 +187,7 @@ int main() {
                         gotoxy(3, 28);
                         makedirectory_main(); //디렉토리 만들기
                         goto TOFIRST;
-                    } else if (leftright == LRINDEX + (11 * 4)) {
-                        gotoxy(3, 29);
-                        printf("sort function");
                     }
-
                     sortedFile = Files.getList();
                     it1 = sortedFile->begin();
                     clearWindow();
@@ -479,17 +476,21 @@ void frame() {
     printf("│──────────────────────────────────────────────────────────────"
            "────"
            "───────────────────│\n");
-    printf("│ Normal mode: w: up s: down q: quit z: Zip mode x: unzip      "
+    printf("│ \033[1;32mNormal mode:\033[0m w, a, s, d : move "
+           "\033[33m/\033[0m q: quit \033[33m/\033[0m z: Zip mode "
+           "\033[33m/\033[0m x: unzip      "
            "    "
-           "                   │\n");
-    printf("│ Zip mode: p: push files for zip z: express files q: quit zip "
+           "         │\n");
+    printf("│ \033[1;32mZip mode:\033[0m p: push files for zip \033[33m/"
+           "\033[0m z: express "
+           "files \033[33m/\033[0m q: quit zip "
            "    "
-           "                   │\n");
+           "               │\n");
     printf("└──────────────────────────────────────────────────────────────"
            "────"
            "───────────────────┘\n");
     gotoxy(5, 2);
-    printf("File Explorer");
+    printf("\033[1;33mFile Explorer\033[0m");
 }
 void printfile(list<sortfile> *f) {
     list<sortfile>::iterator it;
@@ -648,6 +649,9 @@ int menuSort(ListSort &files) {
 
             clearWindow();
             printfile(files.getList());
+        } else if (key == QUIT){
+            system("clear");
+            exit(-2);
         }
     }
 }
