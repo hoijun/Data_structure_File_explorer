@@ -663,6 +663,7 @@ int menuSort(ListSort &files) {
         }
     }
 }
+
 bool checkUp(Check check, int corsur) {
     if (corsur == LRINDEX) {
         return check.nameUp;
